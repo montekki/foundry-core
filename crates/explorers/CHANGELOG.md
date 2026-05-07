@@ -5,7 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.23.0](https://github.com/foundry-rs/foundry-core/releases/tag/0.23.0) - 2026-04-24
+## [0.23.1](https://github.com/foundry-rs/foundry-core/releases/tag/0.23.1) - 2026-05-07
+
+### Dependencies
+
+- Pin dependencies to patch versions ([#53](https://github.com/foundry-rs/foundry-core/issues/53))
+
+### Documentation
+
+- Add missing feature flags to READMEs ([#47](https://github.com/foundry-rs/foundry-core/issues/47))
+
+### Features
+
+- [block-explorers] Add `set_no_proxy(bool)` builder method ([#56](https://github.com/foundry-rs/foundry-core/issues/56))
+- [block-explorers] Add `no_proxy` to `ClientBuilder` ([#51](https://github.com/foundry-rs/foundry-core/issues/51))
+
+## [0.23.0](https://github.com/foundry-rs/foundry-core/releases/tag/explorers-v0.23.0) - 2026-04-24
 
 ### Bug Fixes
 
@@ -18,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Miscellaneous Tasks
 
+- Release
 - Replace CI OIDC release with local release flow
 
 ### Other
