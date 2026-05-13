@@ -5,69 +5,74 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.23.1](https://github.com/foundry-rs/foundry-core/releases/tag/0.23.1) - 2026-05-07
-
-### Dependencies
-
-- Pin dependencies to patch versions ([#53](https://github.com/foundry-rs/foundry-core/issues/53))
-
-### Documentation
-
-- Add missing feature flags to READMEs ([#47](https://github.com/foundry-rs/foundry-core/issues/47))
-
-### Features
-
-- [block-explorers] Add `set_no_proxy(bool)` builder method ([#56](https://github.com/foundry-rs/foundry-core/issues/56))
-- [block-explorers] Add `no_proxy` to `ClientBuilder` ([#51](https://github.com/foundry-rs/foundry-core/issues/51))
-
-## [0.23.0](https://github.com/foundry-rs/foundry-core/releases/tag/explorers-v0.23.0) - 2026-04-24
+## [0.24.0](https://github.com/foundry-rs/foundry-core/releases/tag/block-explorers-v0.24.0) - 2026-05-13
 
 ### Bug Fixes
 
-- Sync explorer crate versions to match crates.io (0.22.0)
-- Restore changelogs from main, confirm before actions in release script
-
-### Features
-
-- Add local interactive release flow ([#25](https://github.com/foundry-rs/foundry-core/issues/25))
-
-### Miscellaneous Tasks
-
-- Release
-- Replace CI OIDC release with local release flow
-
-### Other
-
-- Add nightly tests workflow ([#38](https://github.com/foundry-rs/foundry-core/issues/38))
-- Use nextest default-filter to exclude external tests
-
-## [0.22.0](https://github.com/foundry-rs/foundry-core/releases/tag/explorers-v0.22.0) - 2026-04-22
-
-### Bug Fixes
-
-- [explorers] Ignore "code already verified" error in `test_can_flatten_and_verify_contract_single_file_mainnet`
-- Typos
+- [release] Use full tag name in changelog URLs ([#65](https://github.com/foundry-rs/foundry-core/issues/65))
+- Treat address-only getsourcecode responses as unverified contracts ([#154](https://github.com/foundry-rs/foundry-core/issues/154))
+- Resolve double serialization in GenesisOption for InternalTransaction ([#106](https://github.com/foundry-rs/foundry-core/issues/106)) ([#113](https://github.com/foundry-rs/foundry-core/issues/113))
+- [serde] Support 0x-prefixed hex in deserialize_stringified_block_number ([#100](https://github.com/foundry-rs/foundry-core/issues/100))
+- Etherscan V2 API URLs from `alloy-chains` already contain `chainid` ([#93](https://github.com/foundry-rs/foundry-core/issues/93))
+- Fix tests ([#77](https://github.com/foundry-rs/foundry-core/issues/77))
+- Solc_config settings ([#63](https://github.com/foundry-rs/foundry-core/issues/63))
+- Fix bugs about the default EVM version in Solc ([#59](https://github.com/foundry-rs/foundry-core/issues/59))
 
 ### Dependencies
 
-- [explorers] Use worskpace's deps
+- Update reqwest to 0.13 ([#149](https://github.com/foundry-rs/foundry-core/issues/149))
+- [deps] Bump compilers 0.19.0 ([#107](https://github.com/foundry-rs/foundry-core/issues/107))
+- [deps] Add dependencies ci workflow + update deps + fix clippy ([#102](https://github.com/foundry-rs/foundry-core/issues/102))
+- Bump solar + MSRV ([#96](https://github.com/foundry-rs/foundry-core/issues/96))
+- Bump compilers v0.17.0 ([#90](https://github.com/foundry-rs/foundry-core/issues/90))
+- Bump compilers to 0.16.0 ([#88](https://github.com/foundry-rs/foundry-core/issues/88))
+- [deps] Bump alloy-core 1.0 + alloy 0.15 ([#86](https://github.com/foundry-rs/foundry-core/issues/86))
+- Bump compilers to v0.14 ([#81](https://github.com/foundry-rs/foundry-core/issues/81))
+- Bump compilers ([#74](https://github.com/foundry-rs/foundry-core/issues/74))
+- Bump compilers ([#67](https://github.com/foundry-rs/foundry-core/issues/67))
+- [deps] Bump compilers ([#62](https://github.com/foundry-rs/foundry-core/issues/62))
+- Updated alloy-core and alloy dependencies ([#61](https://github.com/foundry-rs/foundry-core/issues/61))
+- Bump compilers ([#55](https://github.com/foundry-rs/foundry-core/issues/55))
+- [deps] Bump compilers 0.9 ([#54](https://github.com/foundry-rs/foundry-core/issues/54))
+- Bump compilers ([#49](https://github.com/foundry-rs/foundry-core/issues/49))
+- [deps] Bump compilers ([#48](https://github.com/foundry-rs/foundry-core/issues/48))
+- Bump compilers ([#47](https://github.com/foundry-rs/foundry-core/issues/47))
+- Bump compilers ([#46](https://github.com/foundry-rs/foundry-core/issues/46))
+- Bump foundry-compilers ([#44](https://github.com/foundry-rs/foundry-core/issues/44))
 
 ### Features
 
-- Migrate `foundry-block-explorers`/`foundry-blob-explorers` ([#14](https://github.com/foundry-rs/foundry-core/issues/14))
-- [explorers] Restore `openssl` feature
+- Add blob-explorer crate ([#42](https://github.com/foundry-rs/foundry-core/issues/42))
 
 ### Miscellaneous Tasks
 
-- Per-crate cliff.toml and release.toml for independent releases
-- [explorers] Remove openssl feature (banned in workspace)
-- [explorers] Update README files
-- [explorers] Integrate to workspace
+- Flatten block-explorers to top-level crate ([#58](https://github.com/foundry-rs/foundry-core/issues/58))
+- Rm fantom ([#124](https://github.com/foundry-rs/foundry-core/issues/124))
+- Remove `doc_auto-cfg` ([#123](https://github.com/foundry-rs/foundry-core/issues/123))
+- Deprecate Etherscan V1 ([#101](https://github.com/foundry-rs/foundry-core/issues/101))
+- Add trace for getabi ([#92](https://github.com/foundry-rs/foundry-core/issues/92))
+- Rustmft
+- FromStr for EtherscanApiVersion ([#85](https://github.com/foundry-rs/foundry-core/issues/85))
+- Improve invalid key checks ([#58](https://github.com/foundry-rs/foundry-core/issues/58))
+- Fix up manifests
+- Release 0.4.1
+- Release 0.4.0
+- Release 0.3.0
+- Release 0.2.8
+- Release 0.2.7
+- Convert to workspace ([#41](https://github.com/foundry-rs/foundry-core/issues/41))
 
 ### Other
 
-- Merge branch 'main' into steven/add-channel-db
-- Typo fix
-- Add 'crates/explorers/' from commit '5636e68e9c0b5472aef533758d7624ac931e3943'
+- Support vyper-json codeformat ([#91](https://github.com/foundry-rs/foundry-core/issues/91))
+- Handle parsing and serialization of etherscan api version ([#83](https://github.com/foundry-rs/foundry-core/issues/83))
+- Update etherscan lib to handle both GET and POST parameters for chainid ([#82](https://github.com/foundry-rs/foundry-core/issues/82))
+- Add v2 verify routes ([#73](https://github.com/foundry-rs/foundry-core/issues/73))
+- The EVM version returned by Blockscout is "default"  ([#53](https://github.com/foundry-rs/foundry-core/issues/53))
+- Create cache directory if needed ([#52](https://github.com/foundry-rs/foundry-core/issues/52))
+
+### Testing
+
+- Add invalid api key response test ([#57](https://github.com/foundry-rs/foundry-core/issues/57))
 
 <!-- generated by git-cliff -->
