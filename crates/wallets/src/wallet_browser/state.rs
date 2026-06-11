@@ -15,9 +15,10 @@ use crate::wallet_browser::{
     },
 };
 
-/// Reason placed in synthesized error responses when in-flight requests are
-/// failed because the wallet was disconnected.
-pub(crate) const DISCONNECT_REASON: &str = "Wallet disconnected";
+#[cfg(feature = "tempo")]
+use crate::wallet_browser::types::{
+    BrowserKeyAuthorizationRequest, BrowserKeyAuthorizationResponse,
+};
 
 #[derive(Debug, Clone)]
 pub(crate) struct BrowserWalletState<N: Network> {
@@ -28,6 +29,10 @@ pub(crate) struct BrowserWalletState<N: Network> {
         Arc<Mutex<RequestQueue<BrowserTransactionRequest<N>, BrowserTransactionResponse>>>,
     /// Request/response queue for signings.
     signings: Arc<Mutex<RequestQueue<BrowserSignRequest, BrowserSignResponse>>>,
+    /// Request/response queue for Tempo `KeyAuthorization` signings.
+    #[cfg(feature = "tempo")]
+    key_authorizations:
+        Arc<Mutex<RequestQueue<BrowserKeyAuthorizationRequest, BrowserKeyAuthorizationResponse>>>,
     /// Unique session token for the wallet browser instance.
     /// The CSP on the served page prevents this token from being loaded by other origins.
     session_token: String,
@@ -48,6 +53,8 @@ impl<N: Network> BrowserWalletState<N> {
             connection: Arc::new(RwLock::new(None)),
             transactions: Arc::new(Mutex::new(RequestQueue::new())),
             signings: Arc::new(Mutex::new(RequestQueue::new())),
+            #[cfg(feature = "tempo")]
+            key_authorizations: Arc::new(Mutex::new(RequestQueue::new())),
             session_token,
             development,
             shutting_down: Arc::new(AtomicBool::new(false)),
@@ -111,7 +118,7 @@ impl<N: Network> BrowserWalletState<N> {
                     BrowserTransactionResponse {
                         id,
                         hash: None,
-                        error: Some(DISCONNECT_REASON.to_string()),
+                        error: Some("Wallet disconnected".to_string()),
                     },
                 );
             }
@@ -124,7 +131,21 @@ impl<N: Network> BrowserWalletState<N> {
                     BrowserSignResponse {
                         id,
                         signature: None,
-                        error: Some(DISCONNECT_REASON.to_string()),
+                        error: Some("Wallet disconnected".to_string()),
+                    },
+                );
+            }
+        }
+        #[cfg(feature = "tempo")]
+        {
+            let mut key_authorizations = self.key_authorizations.lock().await;
+            for id in key_authorizations.drain_request_ids() {
+                key_authorizations.add_response(
+                    id,
+                    BrowserKeyAuthorizationResponse {
+                        id,
+                        signed_hex: None,
+                        error: Some("Wallet disconnected".to_string()),
                     },
                 );
             }
@@ -195,5 +216,51 @@ impl<N: Network> BrowserWalletState<N> {
     /// Get signing response, removing it from the queue.
     pub async fn get_signing_response(&self, id: &Uuid) -> Option<BrowserSignResponse> {
         self.signings.lock().await.get_response(id)
+    }
+
+    // -- Tempo `KeyAuthorization` signings -----------------------------------
+
+    /// Add a Tempo `KeyAuthorization` signing request.
+    #[cfg(feature = "tempo")]
+    pub async fn add_key_authorization_request(&self, request: BrowserKeyAuthorizationRequest) {
+        self.key_authorizations.lock().await.add_request(request);
+    }
+
+    /// Check if a Tempo `KeyAuthorization` signing request exists.
+    #[cfg(feature = "tempo")]
+    pub async fn has_key_authorization_request(&self, id: &Uuid) -> bool {
+        self.key_authorizations.lock().await.has_request(id)
+    }
+
+    /// Read the next Tempo `KeyAuthorization` signing request.
+    #[cfg(feature = "tempo")]
+    pub async fn read_next_key_authorization_request(
+        &self,
+    ) -> Option<BrowserKeyAuthorizationRequest> {
+        self.key_authorizations.lock().await.read_request().cloned()
+    }
+
+    /// Remove a Tempo `KeyAuthorization` signing request.
+    #[cfg(feature = "tempo")]
+    pub async fn remove_key_authorization_request(&self, id: &Uuid) {
+        self.key_authorizations.lock().await.remove_request(id);
+    }
+
+    /// Add a Tempo `KeyAuthorization` signing response.
+    #[cfg(feature = "tempo")]
+    pub async fn add_key_authorization_response(&self, response: BrowserKeyAuthorizationResponse) {
+        let id = response.id;
+        let mut key_authorizations = self.key_authorizations.lock().await;
+        key_authorizations.add_response(id, response);
+        key_authorizations.remove_request(&id);
+    }
+
+    /// Get a Tempo `KeyAuthorization` signing response, removing it from the queue.
+    #[cfg(feature = "tempo")]
+    pub async fn get_key_authorization_response(
+        &self,
+        id: &Uuid,
+    ) -> Option<BrowserKeyAuthorizationResponse> {
+        self.key_authorizations.lock().await.get_response(id)
     }
 }

@@ -22,7 +22,14 @@ pub async fn build_router<N: Network>(state: Arc<BrowserWalletState<N>>, port: u
         .route("/signing/response", post(handlers::post_signing_response))
         .route("/connection", get(handlers::get_connection_info))
         .route("/connection", post(handlers::post_connection_update))
-        .route("/session", get(handlers::get_session_info))
+        .route("/session", get(handlers::get_session_info));
+
+    #[cfg(feature = "tempo")]
+    let api = api
+        .route("/key-authorization/request", get(handlers::get_next_key_authorization_request))
+        .route("/key-authorization/response", post(handlers::post_key_authorization_response));
+
+    let api = api
         .route_layer(middleware::from_fn_with_state(state.clone(), require_session_token))
         .with_state(state.clone());
 
