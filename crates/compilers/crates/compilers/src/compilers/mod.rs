@@ -21,9 +21,14 @@ use std::{
     sync::{Mutex, OnceLock},
 };
 
+pub mod fe;
 pub mod multi;
 pub mod solc;
 pub mod vyper;
+pub use fe::{
+    FE_EXTENSIONS, Fe, FeCompilationError, FeLanguage, FeOptimizationLevel, FeParsedSource,
+    FeParser, FeRestrictions, FeSettings,
+};
 pub use vyper::*;
 
 mod restrictions;
@@ -138,6 +143,9 @@ pub trait CompilerInput: Serialize + Send + Sync + Sized + Debug {
 
     /// Strips given prefix from all paths.
     fn strip_prefix(&mut self, base: &Path);
+
+    /// Records the project root, if a compiler needs access to project-local metadata.
+    fn set_project_root(&mut self, _root: &Path) {}
 }
 
 /// [`ParsedSource`] parser.
