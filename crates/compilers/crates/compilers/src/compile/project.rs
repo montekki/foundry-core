@@ -528,6 +528,7 @@ impl<L: Language, S: CompilerSettings> CompilerSources<'_, L, S> {
 
                 let mut input = C::Input::build(sources, settings, language, version.clone());
 
+                input.set_project_root(project.paths.root.as_path());
                 input.strip_prefix(project.paths.root.as_path());
 
                 if let Some(preprocessor) = preprocessor.as_ref() {
